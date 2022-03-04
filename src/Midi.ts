@@ -9,6 +9,8 @@ import { Header, HeaderJSON } from "./Header";
 import { Track, TrackJSON } from "./Track";
 import { encode } from "./Encode";
 
+import fs from "fs";
+
 /**
  * The main midi parsing class.
  */
@@ -27,6 +29,17 @@ export class Midi {
 		} else {
 			throw new Error(`Could not load '${url}'`);
 		}
+	}
+	
+	/**
+	 * Read and parse the MIDI file. Returns a promise
+	 * which resolves to the generated MIDI file.
+	 * @param path The path to the MIDI file.
+	 */
+	static async fromFile(path: string): Promise<Midi> {
+		const file = fs.readFileSync(path);
+		const arrayBuffer = new Uint8Array(file).buffer;
+		return new Midi(arrayBuffer);
 	}
 
 	/**
